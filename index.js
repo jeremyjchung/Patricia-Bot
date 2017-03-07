@@ -34,12 +34,11 @@ app.post('/webhook', function (req, res) {
   // Make sure this is a page subscription
   if (data.object === 'page') {
     data.entry.forEach(function(entry) {
-      var pageID = entry.id;
-      var timeOfEvent = entry.time;
+      var sender = entry.id;
 
       entry.messaging.forEach(function(event) {
         if (event.message && even.message.text) {
-          sendTextMessage(event.message.text);
+          sendTextMessage(sender, event.message.text);
         } else {
           console.log("Webhook received unknown event: ", event);
         }
