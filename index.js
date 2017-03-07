@@ -26,17 +26,17 @@ app.get('/webhook/', function (req, res) {
     res.send('Error, wrong token')
 })
 
-const token = process.env.FB_PAGE_ACCESS_TOKEN;
+const token = process.env.FB_PAGE_ACCESS_TOKEN
 
 app.post('/webhook', function (req, res) {
-    var data = req.body;
+    var data = req.body
 
     // Make sure this is a page subscription
     if (data.object === 'page') {
 
         // Iterate over each entry - there may be multiple if batched
         data.entry.forEach(function(entry) {
-            let sender = entry.id
+            let sender = entry.sender.id
 
             // Iterate over each messaging event
             entry.messaging.forEach(function(event) {
@@ -46,7 +46,7 @@ app.post('/webhook', function (req, res) {
         			  }
       		  })
         })
-        res.sendStatus(200);
+        res.sendStatus(200)
     }
 })
 
