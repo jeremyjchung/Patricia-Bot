@@ -34,9 +34,10 @@ app.post('/webhook', function (req, res) {
   // Make sure this is a page subscription
   if (data.object === 'page') {
     data.entry.forEach(function(entry) {
-      var sender = entry.id;
 
       entry.messaging.forEach(function(event) {
+        let sender = event.sender.id;
+        
         if (event.message && event.message.text) {
           sendTextMessage(sender, event.message.text);
         } else {
