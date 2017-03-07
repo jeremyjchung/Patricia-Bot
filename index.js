@@ -28,17 +28,26 @@ app.get('/webhook/', function (req, res) {
 
 const token = process.env.FB_PAGE_ACCESS_TOKEN
 
-app.post('/webhook/', function (req, res) {
-    let messaging_events = req.body.entry[0].messaging
-    for (let i = 0; i < messaging_events.length; i++) {
-        let event = req.body.entry[0].messaging[i]
-        let sender = event.sender.id
-        if (event.message && event.message.text) {
-            let text = event.message.text
-            sendTextMessage(sender, "Text received, echo: " + text.substring(0, 200))
+app.post('/webhook', function (req, res) {
+  var data = req.body
+
+  // Make sure this is a page subscription
+  if (data.object === 'page') {
+    data.entry.forEach(function(entry) {
+      var pageID = entry.id;
+      var timeOfEvent = entry.time;
+
+      entry.messaging.forEach(function(event) {
+        if (event.message && even.message.text) {
+          sendTextMessage(event.message.text);
+        } else {
+          console.log("Webhook received unknown event: ", event);
         }
-    }
-    res.sendStatus(200)
+      })
+    })
+
+    res.sendStatus(200);
+  }
 })
 
 function sendTextMessage(sender, text) {
