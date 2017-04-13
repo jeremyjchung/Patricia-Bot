@@ -18,9 +18,11 @@ app.get('/', function (req, res) {
     res.send('Hello world, I am Patricia!')
 })
 
+const verify_token = process.env.WEBHOOK_VERIFICATION_TOKEN
+
 // for Facebook verification
 app.get('/webhook/', function (req, res) {
-    if (req.query['hub.verify_token'] === 'try_try_and_trie_again') {
+    if (req.query['hub.verify_token'] === verify_token) {
         res.send(req.query['hub.challenge'])
     }
     res.send('Error, wrong token')
@@ -37,7 +39,7 @@ app.post('/webhook', function (req, res) {
 
       entry.messaging.forEach(function(event) {
         let sender = event.sender.id;
-        
+
         if (event.message && event.message.text) {
           sendTextMessage(sender, event.message.text);
         } else {
